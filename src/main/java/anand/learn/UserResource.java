@@ -10,12 +10,22 @@ import java.util.List;
 @Path("/user")
 public class UserResource {
 
-    private static final List<User> users = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser() {
         return Response.ok(users).build();
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserById(@PathParam("id") int userId) {
+        return users.stream().filter(user-> user.getId() == userId)
+                .findFirst()
+                .map(Response::ok)
+                .orElse(Response.status(Response.Status.NOT_FOUND)).build();
     }
 
     @POST
