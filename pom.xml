@@ -57,10 +57,6 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-rest-jackson</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.</groupId>
-            <artifactId></artifactId>
-        </dependency>
     </dependencies>
 
     <build>
