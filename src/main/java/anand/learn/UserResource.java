@@ -1,73 +1,75 @@
 package anand.learn;
 
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Path("/user")
 public class UserResource {
 
-    private final List<User> users = new ArrayList<>();
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser() {
-        return Response.ok(users).build();
+        return Response.ok(User.findAll()).build();
     }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserById(@PathParam("id") int userId) {
-        return users.stream().filter(user-> user.getId() == userId)
-                .findFirst()
+        return User.findByIdOptional(userId)
                 .map(Response::ok)
                 .orElse(Response.status(Response.Status.NOT_FOUND)).build();
     }
 
     @POST
+    @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addUser(User user) {
-        users.add(user);
+        user.persist();
         return Response.ok(user).build();
     }
 
     @PUT
+    @Transactional
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateUser(@PathParam("id") int existingUserId,
                                User newUser) {
-        return users.stream()
-                .filter(user -> user.getId() == existingUserId)
-                .findFirst()
-                .map(user -> {
-                    user.setName(newUser.getName());
-                    user.setAge(newUser.getAge());
-                    user.setEmail(newUser.getEmail());
-
-                    return Response.ok(user).build();
-                })
-                .orElse(Response.status(Response.Status.NOT_FOUND).build());
+        Optional<User> existingUserOptional = User.findByIdOptional(existingUserId);
+        if(existingUserOptional.isPresent()) {
+            User existingUser = existingUserOptional.get();
+            // Update existing user with new values
+            existingUser.setName(newUser.getName());
+            existingUser.setEmail(newUser.getEmail());
+            existingUser.setAge(newUser.getAge());
+            existingUser.persist();
+            if (existingUser.isPersistent()) {
+                return Response.ok(existingUser).build();
+            }
+            return Response.ok(existingUser).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @DELETE
+    @Transactional
     @Path("/{deleteUserId}")
     @Produces(MediaType.TEXT_PLAIN)
     public Response deleteUser(@PathParam("deleteUserId") int deleteUserId) {
-            //use stream
-            return users.stream()
-                    .filter(user -> user.getId() == deleteUserId)
-                    .findFirst()
-                    .map(user -> {
-                        users.remove(user);
-                        return Response.ok("User deleted").build();
-                    })
-                    .orElse(Response.status(Response.Status.NOT_FOUND).build());
-
+        boolean isDeleted = User.deleteById(deleteUserId);
+        if (isDeleted) {
+            return Response.ok("User deleted successfully").build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 }

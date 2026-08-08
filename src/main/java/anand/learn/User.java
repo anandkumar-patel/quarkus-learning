@@ -1,28 +1,24 @@
 package anand.learn;
 
-public class User {
-    private int id;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.Entity;
+
+@Entity(name = "user_table")
+public class User extends PanacheEntity {
     private String name;
     private int age;
     private String email;
 
     // Constructor
-    public User(int id, String name, int age, String email) {
-        this.id = id;
+    public User() {
+    }
+    public User(String name, int age, String email) {
         this.name = name;
         this.age = age;
         this.email = email;
     }
 
     // Getters and Setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
