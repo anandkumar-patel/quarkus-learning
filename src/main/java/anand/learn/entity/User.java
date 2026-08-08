@@ -1,10 +1,15 @@
-package anand.learn;
+package anand.learn.entity;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity(name = "user_table")
-public class User extends PanacheEntity {
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String name;
     private int age;
     private String email;
@@ -12,13 +17,23 @@ public class User extends PanacheEntity {
     // Constructor
     public User() {
     }
-    public User(String name, int age, String email) {
+    public User(Long id, String name, int age, String email) {
+        this.id = id;
         this.name = name;
         this.age = age;
         this.email = email;
     }
 
     // Getters and Setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
