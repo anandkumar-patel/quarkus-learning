@@ -14,18 +14,7 @@ public class User {
     private int age;
     private String email;
 
-    // Constructor
-    public User() {
-    }
-    public User(Long id, String name, int age, String email) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.email = email;
-    }
-
     // Getters and Setters
-
     public Long getId() {
         return id;
     }
