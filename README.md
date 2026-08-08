@@ -67,3 +67,5 @@ Easily start your REST Web Services
 2. swagger-doc
 3. microprofile-rest-client-fault-tolerance
 4. hibernate-orm-panache-entity
+5. hibernate-orm-panache-repository
+6. hibernate-orm-panache-repository-mappings
