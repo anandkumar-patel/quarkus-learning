@@ -60,3 +60,12 @@ If you want to learn more about building native executables, please consult <htt
 Easily start your REST Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+
+
+## All branches sequence for learning
+1. main
+2. swagger-doc
+3. microprofile-rest-client-fault-tolerance
+4. hibernate-orm-panache-entity
+5. hibernate-orm-panache-repository
+6. hibernate-orm-panache-repository-mappings
