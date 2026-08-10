@@ -1,4 +1,4 @@
-package anand.learn;
+package anand.learn.exception;
 
 public class InvalidUserException extends RuntimeException {
 

@@ -1,6 +1,8 @@
-package anand.learn;
+package anand.learn.resource;
 
 import anand.learn.entity.User;
+import anand.learn.exception.InvalidUserException;
+import anand.learn.exception.UserNotFoundException;
 import anand.learn.service.UserService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -80,11 +82,9 @@ public class UserResource {
     }
 
     private void validateUser(User user) {
-        if (user == null) {
-            throw new InvalidUserException("User body is required");
-        }
+        // to check generic exception mapper
         if (user.getEmail() == null || user.getEmail().isBlank()) {
-            throw new InvalidUserException("Email is required");
+            throw new RuntimeException("Email is required");
         }
         if (user.getName() == null || user.getName().isBlank()) {
             throw new InvalidUserException("Name is required");

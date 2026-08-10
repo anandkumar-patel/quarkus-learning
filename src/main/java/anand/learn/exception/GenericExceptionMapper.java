@@ -1,4 +1,4 @@
-package anand.learn;
+package anand.learn.exception;
 
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;

@@ -1,4 +1,4 @@
-package anand.learn;
+package anand.learn.exception;
 
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
