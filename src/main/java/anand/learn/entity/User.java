@@ -1,13 +1,23 @@
-package anand.learn;
+package anand.learn.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity(name = "users")
 public class User {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String name;
     private int age;
     private String email;
 
     // Constructor
-    public User(int id, String name, int age, String email) {
+    public User() {
+    }
+    public User(Long id, String name, int age, String email) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -15,11 +25,12 @@ public class User {
     }
 
     // Getters and Setters
-    public int getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
