@@ -22,52 +22,77 @@ public class UserResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserById(@PathParam("id") int userId) {
-        return users.stream().filter(user-> user.getId() == userId)
+
+        User user = users.stream()
+                .filter(u -> u.getId() == userId)
                 .findFirst()
-                .map(Response::ok)
-                .orElse(Response.status(Response.Status.NOT_FOUND)).build();
+                .orElseThrow(() ->
+                        new UserNotFoundException(
+                                "User with id " + userId + " not found"
+                        )
+                );
+
+        return Response.ok(user).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addUser(User user) {
+        if (user.getEmail() == null || user.getEmail().isEmpty()) {
+            throw new InvalidUserException("Email is required");
+        }
+        if (user.getName() == null || user.getName().isEmpty()) {
+            throw new RuntimeException("Name is required, generic exception");
+        }
         users.add(user);
-        return Response.ok(user).build();
+
+        return Response
+                .status(Response.Status.CREATED)
+                .entity(user)
+                .build();
     }
 
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUser(@PathParam("id") int existingUserId,
-                               User newUser) {
-        return users.stream()
+    public Response updateUser(
+            @PathParam("id") int existingUserId,
+            User newUser) {
+
+        User existingUser = users.stream()
                 .filter(user -> user.getId() == existingUserId)
                 .findFirst()
-                .map(user -> {
-                    user.setName(newUser.getName());
-                    user.setAge(newUser.getAge());
-                    user.setEmail(newUser.getEmail());
+                .orElseThrow(() ->
+                        new UserNotFoundException(
+                                "User with id " + existingUserId + " not found"
+                        )
+                );
+        existingUser.setName(newUser.getName());
+        existingUser.setAge(newUser.getAge());
+        existingUser.setEmail(newUser.getEmail());
 
-                    return Response.ok(user).build();
-                })
-                .orElse(Response.status(Response.Status.NOT_FOUND).build());
+        return Response.ok(existingUser).build();
     }
 
     @DELETE
     @Path("/{deleteUserId}")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response deleteUser(@PathParam("deleteUserId") int deleteUserId) {
-            //use stream
-            return users.stream()
-                    .filter(user -> user.getId() == deleteUserId)
-                    .findFirst()
-                    .map(user -> {
-                        users.remove(user);
-                        return Response.ok("User deleted").build();
-                    })
-                    .orElse(Response.status(Response.Status.NOT_FOUND).build());
+    public Response deleteUser(
+            @PathParam("deleteUserId") int deleteUserId) {
 
+        User user = users.stream()
+                .filter(u -> u.getId() == deleteUserId)
+                .findFirst()
+                .orElseThrow(() ->
+                        new UserNotFoundException(
+                                "User with id " + deleteUserId + " not found"
+                        )
+                );
+
+        users.remove(user);
+
+        return Response.ok("User deleted").build();
     }
 }
