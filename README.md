@@ -69,3 +69,6 @@ Easily start your REST Web Services
 4. hibernate-orm-panache-entity
 5. hibernate-orm-panache-repository
 6. hibernate-orm-panache-repository-mappings
+7. microprofile-configuration
+8. exception-Jakarta-rest-exception-mapper
+9. exception-server-exception-mapper
